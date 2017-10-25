@@ -1,0 +1,59 @@
+apply plugin: 'com.android.application'
+
+android {
+    signingConfigs {
+        config {
+            keyAlias 'key0'
+            keyPassword 'A123456789'
+            storeFile file('C:/Users/User/android.jks')
+            storePassword 'A123456'
+        }
+    }
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
+    defaultConfig {
+        applicationId "com.example.user.myapplication"
+        minSdkVersion 15
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.config
+    }
+    buildTypes {
+        debug {
+            buildConfigField "String", "BASE_CALC_URL", "\"https://servlet-calculator.appspot.com\""
+        }
+        release {
+            buildConfigField "String", "BASE_CALC_URL", "\"https://servlet-calculator-release.appspot.com/\""
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets { debug { java.srcDirs = ['src/debug/java', 'src/debug/java/'] } }
+    productFlavors {
+
+        GooglePlay {
+            flavorDimension "store"
+            buildConfigField "String", "SHARE_URL", "\"http://googlestore.com\""
+        }
+
+        Amazon {
+            flavorDimension "store"
+            buildConfigField "String", "SHARE_URL", "\"http://amazon.com\""
+        }
+
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:26.+'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    testCompile 'junit:junit:4.12'
+    compile 'com.google.code.gson:gson:2.7'
+    compile project(':lib')
+}
